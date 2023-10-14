@@ -5,7 +5,7 @@
 
 #include "abcgOpenGL.hpp"
 
-#include "cobra.hpp"
+#include "tartaruga.hpp"
 
 class Window : public abcg::OpenGLWindow {
 protected:
@@ -24,7 +24,7 @@ private:
 
   GameData m_gameData;
 
-  Cobra m_cobra;
+  Tartaruga m_tartaruga;
 
   abcg::Timer m_restartWaitTimer;
 
@@ -33,6 +33,7 @@ private:
   std::default_random_engine m_randomEngine;
 
   void restart();
+  void checkWinCondition();
 };
 
 #endif

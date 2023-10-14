@@ -1,11 +1,11 @@
-#ifndef COBRA_HPP_
-#define COBRA_HPP_
+#ifndef TARTARUGA_HPP_
+#define TARTARUGA_HPP_
 
 #include "abcgOpenGL.hpp"
 
 #include "gamedata.hpp"
 
-class Cobra {
+class Tartaruga {
 public:
   void create(GLuint program);
   void paint(GameData const &gameData);

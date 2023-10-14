@@ -62,7 +62,7 @@ void Window::onCreate() {
 void Window::restart() {
   m_gameData.m_state = State::Playing;
 
-  m_cobra.create(m_objectsProgram);
+  m_tartaruga.create(m_objectsProgram);
 }
 
 void Window::onUpdate() {
@@ -75,14 +75,25 @@ void Window::onUpdate() {
     return;
   }
 
-  m_cobra.update(m_gameData, deltaTime);
+  m_tartaruga.update(m_gameData, deltaTime);
 }
 
 void Window::onPaint() {
   abcg::glClear(GL_COLOR_BUFFER_BIT);
   abcg::glViewport(0, 0, m_viewportSize.x, m_viewportSize.y);
 
-  m_cobra.paint(m_gameData);
+  m_tartaruga.paint(m_gameData);
+
+  if (m_gameData.m_state == State::Playing) {
+    checkWinCondition();
+  }
+}
+
+void Window::checkWinCondition() {
+  if (m_tartaruga.m_translation.y > 0.85f) {
+    m_gameData.m_state = State::Win;
+    m_restartWaitTimer.restart();
+  }
 }
 
 void Window::onPaintUI() {
@@ -120,5 +131,5 @@ void Window::onResize(glm::ivec2 const &size) {
 void Window::onDestroy() {
   abcg::glDeleteProgram(m_objectsProgram);
 
-  m_cobra.destroy();
+  m_tartaruga.destroy();
 }
