@@ -29,15 +29,15 @@ void Window::onEvent(SDL_Event const &event) {
 }
 
 void Window::onCreate() {
+
   auto const assetsPath{abcg::Application::getAssetsPath()};
 
   // Load a new font
-  //   auto const filename{assetsPath + "game-over.ttf"};
-  //   m_font =
-  //   ImGui::GetIO().Fonts->AddFontFromFileTTF(filename.c_str(), 70.0f); if
-  //   (m_font == nullptr) {
-  //     throw abcg::RuntimeError("Cannot load font file");
-  //   }
+  auto const filename{assetsPath + "emulogic.ttf"};
+  m_font = ImGui::GetIO().Fonts->AddFontFromFileTTF(filename.c_str(), 50.0f);
+  if (m_font == nullptr) {
+    throw abcg::RuntimeError("Cannot load font file");
+  }
 
   // Create program to render the other objects
   m_objectsProgram =
