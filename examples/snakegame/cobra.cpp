@@ -17,7 +17,7 @@ void Cobra::create(GLuint program) {
   // Reset snake attributes
   m_rotation = 0.0f;
   m_translation = glm::vec2(0);
-  m_velocity = glm::vec2(0);
+  m_velocity = glm::vec2(0.5f);
 
   // Define the snake's body as a triangle
   std::array positions{glm::vec2{0.0f, 0.1f}, glm::vec2{-0.1f, -0.1f},
@@ -99,29 +99,20 @@ void Cobra::destroy() {
 }
 
 void Cobra::update(const GameData &gameData, float deltaTime) {
-  // Handle the input for movement
-  if (gameData.m_input[static_cast<size_t>(Input::Up)] &&
-      gameData.m_state == State::Playing) {
-    // Move the snake in the forward direction
-    // Change the position based on the current direction the snake is facing
-    // Adjust the speed according to deltaTime
-    auto const forward{glm::vec2{0.0f, 1.0f}}; // Adjust this direction based on
-                                               // the snake's current direction
-    m_position += forward * deltaTime; // Adjust the speed as needed
-  }
 
-  // Handle the logic for updating the snake's state
-  // This includes growing the snake, checking for collisions, etc.
-  // You need to define this logic based on the specific mechanics of your
-  // snake game For instance, you might need to check for collisions with the
-  // food or with the boundaries of the game area Additionally, you might need
-  // to update the length and position of the snake accordingly Update the
-  // score or any other necessary game parameters You can also update the
-  // speed or direction of the snake based on certain conditions
+  // Rotate
+  if (gameData.m_input[gsl::narrow<size_t>(Input::Left)])
+    m_rotation = glm::wrapAngle(m_rotation + 4.0f * deltaTime);
+  if (gameData.m_input[gsl::narrow<size_t>(Input::Right)])
+    m_rotation = glm::wrapAngle(m_rotation - 4.0f * deltaTime);
 
-  // Add any other logic specific to the behavior of the snake in your game
-  // For example, you might need to implement the logic for the snake's
-  // movement, growth, and collision detection here You might also need to
-  // handle the speed and direction of the snake based on the input or other
-  // game conditions
+  // Ajustar o vetor de direção com base na rotação atual
+  auto const rotationRadians{glm::radians(m_rotation)};
+  auto const forward{
+      glm::vec2{glm::cos(rotationRadians), glm::sin(rotationRadians)}};
+
+  // Mover a cobra automaticamente na direção atual
+  m_translation += forward * m_velocity * deltaTime;
+
+  // Restante da lógica do jogo aqui
 }
