@@ -7,6 +7,8 @@
 
 #include "tartaruga.hpp"
 
+#include "jacare.hpp"
+
 class Window : public abcg::OpenGLWindow {
 protected:
   void onEvent(SDL_Event const &event) override;
@@ -25,6 +27,8 @@ private:
   GameData m_gameData;
 
   Tartaruga m_tartaruga;
+
+  Jacare m_jacare;
 
   abcg::Timer m_restartWaitTimer;
 

@@ -1,9 +1,9 @@
-#include "tartaruga.hpp"
+#include "jacare.hpp"
 
 #include <glm/gtx/fast_trigonometry.hpp>
 #include <glm/gtx/rotate_vector.hpp>
 
-void Tartaruga::create(GLuint program) {
+void Jacare::create(GLuint program) {
   destroy();
 
   m_program = program;
@@ -20,47 +20,55 @@ void Tartaruga::create(GLuint program) {
   m_scale = 0.15f;
 
   std::array positions{
-      // turtle body
-      glm::vec2{+0.5f, +0.5f},
-      glm::vec2{+0.5f, +0.0f},
-      glm::vec2{+0.00f, +0.5f},
-      glm::vec2{+0.0f, +0.0f},
+      // jacare head
+      glm::vec2{+2.5f, +0.8f},
+      glm::vec2{+3.4f, +0.8f},
+      glm::vec2{+3.5f, +0.7f},
+      glm::vec2{+3.5f, +0.3f},
+      glm::vec2{+3.4f, +0.2f},
+      glm::vec2{+2.5f, +0.2f},
 
-      // head and tail
-      glm::vec2{+0.1f, +0.6f},
-      glm::vec2{+0.4f, +0.6f},
-      glm::vec2{+0.1f, -0.1f},
-      glm::vec2{+0.4f, -0.1f},
+      glm::vec2{+2.0f, +0.9f},
+      glm::vec2{+2.0f, +0.1f},
+
+      // corpo
+      glm::vec2{+2.0f, +0.0f}, // 6
+      glm::vec2{+0.0f, 0.0f},
+      glm::vec2{+0.0f, +1.0f},
+      glm::vec2{+2.0f, +1.0f},
 
       // fins
-      glm::vec2{+0.0f, +0.5f},
-      glm::vec2{-0.1f, +0.7f},
-      glm::vec2{-0.2f, +0.6f},
+      glm::vec2{+0.2f, +1.2f}, // 10
+      glm::vec2{+0.4f, +1.0f},
 
-      glm::vec2{+0.5f, +0.5f},
-      glm::vec2{+0.6f, +0.7f},
-      glm::vec2{+0.7f, +0.6f},
+      glm::vec2{+0.2f, -0.2f}, // 12
+      glm::vec2{+0.4f, 0.0f},
 
-      glm::vec2{+0.0f, +0.0f},
-      glm::vec2{-0.2f, -0.1f},
-      glm::vec2{-0.1f, -0.2f},
+      glm::vec2{+1.8f, +1.2f},
+      glm::vec2{+1.6f, +1.0f},
+      glm::vec2{+1.8f, -0.2f},
+      glm::vec2{+1.6f, +0.0f},
 
-      glm::vec2{+0.5f, +0.0f},
-      glm::vec2{+0.6f, -0.2f},
-      glm::vec2{+0.7f, -0.1f},
+      // Tail
+      glm::vec2{-2.0f, +0.5f},
+      glm::vec2{+0.0f, +0.8f},
+      glm::vec2{+0.0f, +0.2f},
 
   };
 
-  // // Normalize
+  // Normalize
   // for (auto &position : positions) {
-  //   position /= glm::vec2{15.5f, 15.5f};
+  //   position /= glm::vec2{3.5f, 2.4f};
   // }
 
-  std::array const indices{0, 1, 2, 1, 2, 3,
-                           // head and tail
-                           4, 5, 7, 4, 6, 7,
+  std::array const indices{// Head
+                           6, 7, 1, 1, 2, 7, 2, 3, 7, 3, 4, 7,
+                           // corpo
+                           8, 9, 10, 8, 10, 11, 0, 8, 11, 0, 5, 8,
                            // fins
-                           8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19};
+                           10, 12, 13, 14, 9, 15, 16, 17, 11, 18, 19, 8,
+                           // tail
+                           22, 20, 21};
   // clang-format on
   // Generate VBO
   abcg::glGenBuffers(1, &m_VBO);
@@ -97,7 +105,7 @@ void Tartaruga::create(GLuint program) {
   abcg::glBindVertexArray(0);
 }
 
-void Tartaruga::paint(const GameData &gameData) {
+void Jacare::paint(const GameData &gameData) {
   if (gameData.m_state != State::Playing)
     return;
 
@@ -109,26 +117,22 @@ void Tartaruga::paint(const GameData &gameData) {
   abcg::glUniform1f(m_rotationLoc, m_rotation);
   abcg::glUniform2fv(m_translationLoc, 1, &m_translation.x);
 
-  // Restart thruster blink timer every 100 ms
-  if (m_trailBlinkTimer.elapsed() > 100.0 / 1000.0)
-    m_trailBlinkTimer.restart();
-
-  m_color = glm::vec4(0.0f, 1.0f, 0.0f, 1.0f);
+  m_color = glm::vec4(0.0f, 0.5f, 0.0f, 1.0f);
   abcg::glUniform4fv(m_colorLoc, 1, &m_color.r);
-  abcg::glDrawElements(GL_TRIANGLES, 8 * 3, GL_UNSIGNED_INT, nullptr);
+  abcg::glDrawElements(GL_TRIANGLES, 13 * 3, GL_UNSIGNED_INT, nullptr);
 
   abcg::glBindVertexArray(0);
 
   abcg::glUseProgram(0);
 }
 
-void Tartaruga::destroy() {
+void Jacare::destroy() {
   abcg::glDeleteBuffers(1, &m_VBO);
   abcg::glDeleteBuffers(1, &m_EBO);
   abcg::glDeleteVertexArrays(1, &m_VAO);
 }
 
-void Tartaruga::update(const GameData &gameData, float deltaTime) {
+void Jacare::update(const GameData &gameData, float deltaTime) {
 
   if (gameData.m_input[gsl::narrow<size_t>(Input::Left)] &&
       m_translation.x > -0.95f)

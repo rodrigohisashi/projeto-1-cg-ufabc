@@ -63,6 +63,8 @@ void Window::restart() {
   m_gameData.m_state = State::Playing;
 
   m_tartaruga.create(m_objectsProgram);
+
+  m_jacare.create(m_objectsProgram);
 }
 
 void Window::onUpdate() {
@@ -83,7 +85,7 @@ void Window::onPaint() {
   abcg::glViewport(0, 0, m_viewportSize.x, m_viewportSize.y);
 
   m_tartaruga.paint(m_gameData);
-
+  m_jacare.paint(m_gameData);
   if (m_gameData.m_state == State::Playing) {
     checkWinCondition();
   }

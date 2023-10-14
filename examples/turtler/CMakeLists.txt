@@ -1,3 +1,3 @@
 project(turtler)
-add_executable(${PROJECT_NAME} main.cpp window.cpp tartaruga.cpp )
+add_executable(${PROJECT_NAME} main.cpp window.cpp tartaruga.cpp jacare.cpp)
 enable_abcg(${PROJECT_NAME})
