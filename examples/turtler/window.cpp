@@ -61,6 +61,7 @@ void Window::onCreate() {
 
 void Window::restart() {
   m_gameData.m_state = State::Playing;
+  m_cenario.create(m_objectsProgram);
 
   m_tartaruga.create(m_objectsProgram);
 
@@ -85,6 +86,7 @@ void Window::onPaint() {
   abcg::glClear(GL_COLOR_BUFFER_BIT);
   abcg::glViewport(0, 0, m_viewportSize.x, m_viewportSize.y);
 
+  m_cenario.paint();
   m_tartaruga.paint(m_gameData);
   m_jacare.paint(m_gameData);
   if (m_gameData.m_state == State::Playing) {
@@ -135,4 +137,5 @@ void Window::onDestroy() {
   abcg::glDeleteProgram(m_objectsProgram);
 
   m_tartaruga.destroy();
+  m_cenario.destroy();
 }
