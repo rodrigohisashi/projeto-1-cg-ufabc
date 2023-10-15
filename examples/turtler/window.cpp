@@ -78,6 +78,7 @@ void Window::onUpdate() {
   }
 
   m_tartaruga.update(m_gameData, deltaTime);
+  m_jacare.update(m_gameData, deltaTime);
 }
 
 void Window::onPaint() {

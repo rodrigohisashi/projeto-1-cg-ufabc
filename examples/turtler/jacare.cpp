@@ -134,19 +134,9 @@ void Jacare::destroy() {
 
 void Jacare::update(const GameData &gameData, float deltaTime) {
 
-  if (gameData.m_input[gsl::narrow<size_t>(Input::Left)] &&
-      m_translation.x > -0.95f)
-    m_translation.x -= 1.0f * deltaTime;
+  m_translation.x += 1.0f * deltaTime;
 
-  if (gameData.m_input[gsl::narrow<size_t>(Input::Right)] &&
-      m_translation.x < +0.85f)
-    m_translation.x += 1.0f * deltaTime;
-
-  if (gameData.m_input[gsl::narrow<size_t>(Input::Down)] &&
-      m_translation.y > -0.95f)
-    m_translation.y -= 1.0f * deltaTime;
-
-  if (gameData.m_input[gsl::narrow<size_t>(Input::Up)] &&
-      m_translation.y < +0.85f)
-    m_translation.y += 1.0f * deltaTime;
+  if (m_translation.x > +1.5f)
+      m_translation.x -= 3.0f;
+  
 }
