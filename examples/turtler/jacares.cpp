@@ -20,8 +20,11 @@ void Jacares::create(GLuint program) {
   int cont = 0;
 
   for (auto &jacare : m_jacares) {
-    jacare = makeJacare();
-
+    if (cont == 2 || cont == 3) {
+      jacare = makeJacare({}, 0.18f, -1);
+    } else {
+      jacare = makeJacare({}, 0.18f, 1);
+    }
     switch (cont) {
     case 0:
       jacare.m_translation = glm::vec2(+0.5f, 0.45f);
@@ -30,10 +33,10 @@ void Jacares::create(GLuint program) {
       jacare.m_translation = glm::vec2(-1.0f, 0.45f);
       break;
     case 2:
-      jacare.m_translation = glm::vec2(1.0f, 0.0f);
+      jacare.m_translation = glm::vec2(1.0f, 0.15f);
       break;
     case 3:
-      jacare.m_translation = glm::vec2(-0.5f, 0.0f);
+      jacare.m_translation = glm::vec2(-0.5f, 0.15f);
       break;
     case 4:
       jacare.m_translation = glm::vec2(0.5f, -0.5f);
@@ -77,21 +80,25 @@ void Jacares::destroy() {
 
 void Jacares::update(float deltaTime) {
   for (auto &jacare : m_jacares) {
-    jacare.m_translation.x += 1.3f * deltaTime;
+    jacare.m_translation.x += 1.3f * deltaTime * jacare.m_direcao;
 
-    if (jacare.m_translation.x > +1.5f)
+    if (jacare.m_translation.x > +1.5f && jacare.m_direcao == 1)
       jacare.m_translation.x -= 3.0f;
+    if (jacare.m_translation.x < -1.5f && jacare.m_direcao == -1)
+      jacare.m_translation.x += 3.0f;
   }
 }
 
-Jacares::Jacare Jacares::makeJacare(glm::vec2 translation, float scale) {
+Jacares::Jacare Jacares::makeJacare(glm::vec2 translation, float scale,
+                                    int direcao) {
   Jacare jacare;
 
   // Reset turtle attributes
-  jacare.m_rotation = 0.0f;
+  jacare.m_rotation = direcao == 1 ? 0.0f : M_PI;
   jacare.m_translation = translation;
   jacare.m_scale = scale;
   jacare.m_color = glm::vec4(0.0f, 0.5f, 0.0f, 1.0f);
+  jacare.m_direcao = direcao;
 
   std::array positions{
       // jacare head

@@ -150,13 +150,19 @@ void Window::checkCollisions() {
 
     float normX;
     float normY;
-    if (m_tartaruga.m_translation.x > jacare.m_translation.x) {
+    if ((m_tartaruga.m_translation.x > jacare.m_translation.x &&
+         jacare.m_direcao == 1) ||
+        (m_tartaruga.m_translation.x < jacare.m_translation.x &&
+         jacare.m_direcao == -1)) {
       normX = dx / jacare.m_scale * 0.27;
     } else {
       normX = dx / jacare.m_scale * 0.7;
     }
 
-    if (m_tartaruga.m_translation.y > jacare.m_translation.y) {
+    if ((m_tartaruga.m_translation.y > jacare.m_translation.y &&
+         jacare.m_direcao == 1) ||
+        ((m_tartaruga.m_translation.y < jacare.m_translation.y &&
+          jacare.m_direcao == -1))) {
       normY = dy / jacare.m_scale * 1;
     } else {
       normY = dy / jacare.m_scale * 1.3;
