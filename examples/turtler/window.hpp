@@ -42,6 +42,7 @@ private:
 
   void restart();
   void checkWinCondition();
+  void checkCollisions();
 };
 
 #endif

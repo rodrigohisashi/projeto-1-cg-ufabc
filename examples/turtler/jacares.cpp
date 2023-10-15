@@ -15,17 +15,32 @@ void Jacares::create(GLuint program) {
   m_translationLoc = abcg::glGetUniformLocation(m_program, "translation");
 
   m_jacares.clear();
-  m_jacares.resize(2);
+  m_jacares.resize(6);
 
   int cont = 0;
 
   for (auto &jacare : m_jacares) {
     jacare = makeJacare();
 
-    if (cont % 2 == 0) {
-      jacare.m_translation = glm::vec2(+0.5f, 0);
-    } else {
-      jacare.m_translation = glm::vec2(-0.5f, 0);
+    switch (cont) {
+    case 0:
+      jacare.m_translation = glm::vec2(+0.5f, 0.45f);
+      break;
+    case 1:
+      jacare.m_translation = glm::vec2(-1.0f, 0.45f);
+      break;
+    case 2:
+      jacare.m_translation = glm::vec2(1.0f, 0.0f);
+      break;
+    case 3:
+      jacare.m_translation = glm::vec2(-0.5f, 0.0f);
+      break;
+    case 4:
+      jacare.m_translation = glm::vec2(0.5f, -0.5f);
+      break;
+    case 5:
+      jacare.m_translation = glm::vec2(-1.0f, -0.5f);
+      break;
     }
     cont += 1;
   }
@@ -61,12 +76,12 @@ void Jacares::destroy() {
 }
 
 void Jacares::update(float deltaTime) {
-  for (auto &jacare : m_jacares) {
-    jacare.m_translation.x += 1.0f * deltaTime;
+  // for (auto &jacare : m_jacares) {
+  //   jacare.m_translation.x += 1.3f * deltaTime;
 
-    if (jacare.m_translation.x > +1.5f)
-      jacare.m_translation.x -= 3.0f;
-  }
+  //   if (jacare.m_translation.x > +1.5f)
+  //     jacare.m_translation.x -= 3.0f;
+  // }
 }
 
 Jacares::Jacare Jacares::makeJacare(glm::vec2 translation, float scale) {

@@ -9,7 +9,7 @@ void Cenario::create(GLuint program) {
   m_colorLoc = abcg::glGetUniformLocation(m_program, "color");
   m_translationLoc = abcg::glGetUniformLocation(m_program, "translation");
   m_scaleLoc = abcg::glGetUniformLocation(m_program, "scale");
-
+  m_rotation = 0.0f;
   // Set up the vertices for the beach
   std::array positions{
       glm::vec2{-1.0f, 0.7f},

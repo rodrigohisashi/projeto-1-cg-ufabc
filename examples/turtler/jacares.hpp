@@ -29,7 +29,7 @@ public:
 
   std::list<Jacare> m_jacares;
 
-  Jacare makeJacare(glm::vec2 translation = {}, float scale = 0.25f);
+  Jacare makeJacare(glm::vec2 translation = {}, float scale = 0.18f);
 
 private:
   GLuint m_program{};
@@ -37,6 +37,5 @@ private:
   GLint m_colorLoc{};
   GLint m_scaleLoc{};
   GLint m_rotationLoc{};
-
 };
 #endif

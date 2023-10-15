@@ -34,7 +34,7 @@ void Window::onCreate() {
 
   // Load a new font
   auto const filename{assetsPath + "emulogic.ttf"};
-  m_font = ImGui::GetIO().Fonts->AddFontFromFileTTF(filename.c_str(), 50.0f);
+  m_font = ImGui::GetIO().Fonts->AddFontFromFileTTF(filename.c_str(), 30.0f);
   if (m_font == nullptr) {
     throw abcg::RuntimeError("Cannot load font file");
   }
@@ -91,6 +91,7 @@ void Window::onPaint() {
   m_jacare.paint();
   if (m_gameData.m_state == State::Playing) {
     checkWinCondition();
+    checkCollisions();
   }
 }
 
@@ -139,4 +140,22 @@ void Window::onDestroy() {
   m_tartaruga.destroy();
   m_cenario.destroy();
   m_jacare.destroy();
+}
+
+void Window::checkCollisions() {
+  // Check collision between ship and asteroids
+  for (auto const &jacare : m_jacare.m_jacares) {
+    float dx = m_tartaruga.m_translation.x - jacare.m_translation.x;
+    float dy = m_tartaruga.m_translation.y - jacare.m_translation.y;
+
+    // Normalizar a distância ao longo do eixo da elipse
+    float normX = dx / jacare.m_scale * 0.9;
+    float normY = dy / jacare.m_scale * 1;
+    float distance = sqrt(normX * normX + normY * normY);
+
+    if (distance < 1.0f) {
+      m_gameData.m_state = State::GameOver;
+      m_restartWaitTimer.restart();
+    }
+  }
 }
