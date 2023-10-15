@@ -9,6 +9,8 @@
 
 #include "jacares.hpp"
 
+#include "cenario.hpp"
+
 class Window : public abcg::OpenGLWindow {
 protected:
   void onEvent(SDL_Event const &event) override;
@@ -29,6 +31,8 @@ private:
   Tartaruga m_tartaruga;
 
   Jacares m_jacare;
+
+  Cenario m_cenario;
 
   abcg::Timer m_restartWaitTimer;
 
