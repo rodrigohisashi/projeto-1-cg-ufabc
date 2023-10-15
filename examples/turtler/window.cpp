@@ -138,4 +138,5 @@ void Window::onDestroy() {
 
   m_tartaruga.destroy();
   m_cenario.destroy();
+  m_jacare.destroy();
 }

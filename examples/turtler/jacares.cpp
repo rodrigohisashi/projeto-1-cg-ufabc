@@ -8,12 +8,18 @@ void Jacares::create(GLuint program) {
 
   m_program = program;
 
+  // Get location of uniforms in the program
+  m_colorLoc = abcg::glGetUniformLocation(m_program, "color");
+  m_rotationLoc = abcg::glGetUniformLocation(m_program, "rotation");
+  m_scaleLoc = abcg::glGetUniformLocation(m_program, "scale");
+  m_translationLoc = abcg::glGetUniformLocation(m_program, "translation");
+
   m_jacares.clear();
   m_jacares.resize(2);
 
   int cont = 0;
 
-  for(auto &jacare : m_jacares) {
+  for (auto &jacare : m_jacares) {
     jacare = makeJacare();
 
     if (cont % 2 == 0) {
@@ -23,16 +29,14 @@ void Jacares::create(GLuint program) {
     }
     cont += 1;
   }
-  
 }
 
 void Jacares::paint() {
-  
 
   abcg::glUseProgram(m_program);
 
   for (auto const &jacare : m_jacares) {
-    
+
     abcg::glBindVertexArray(jacare.m_VAO);
 
     abcg::glUniform1f(m_scaleLoc, jacare.m_scale);
@@ -41,15 +45,15 @@ void Jacares::paint() {
 
     abcg::glUniform4fv(m_colorLoc, 1, &jacare.m_color.r);
     abcg::glDrawElements(GL_TRIANGLES, 13 * 3, GL_UNSIGNED_INT, nullptr);
-
-    abcg::glBindVertexArray(0);
-
-    abcg::glUseProgram(0);
   }
+
+  abcg::glBindVertexArray(0);
+
+  abcg::glUseProgram(0);
 }
 
 void Jacares::destroy() {
-  for(auto &jacare : m_jacares) {
+  for (auto &jacare : m_jacares) {
     abcg::glDeleteBuffers(1, &jacare.m_VBO);
     abcg::glDeleteBuffers(1, &jacare.m_EBO);
     abcg::glDeleteVertexArrays(1, &jacare.m_VAO);
@@ -57,23 +61,16 @@ void Jacares::destroy() {
 }
 
 void Jacares::update(float deltaTime) {
-  for(auto &jacare : m_jacares) {
+  for (auto &jacare : m_jacares) {
     jacare.m_translation.x += 1.0f * deltaTime;
 
     if (jacare.m_translation.x > +1.5f)
-        jacare.m_translation.x -= 3.0f;
+      jacare.m_translation.x -= 3.0f;
   }
-  
 }
 
 Jacares::Jacare Jacares::makeJacare(glm::vec2 translation, float scale) {
   Jacare jacare;
-
-  // Get location of uniforms in the program
-  m_colorLoc = abcg::glGetUniformLocation(m_program, "color");
-  m_rotationLoc = abcg::glGetUniformLocation(m_program, "rotation");
-  m_scaleLoc = abcg::glGetUniformLocation(m_program, "scale");
-  m_translationLoc = abcg::glGetUniformLocation(m_program, "translation");
 
   // Reset turtle attributes
   jacare.m_rotation = 0.0f;
@@ -165,6 +162,6 @@ Jacares::Jacare Jacares::makeJacare(glm::vec2 translation, float scale) {
 
   // End of binding to current VAO
   abcg::glBindVertexArray(0);
-  
+
   return jacare;
 }
