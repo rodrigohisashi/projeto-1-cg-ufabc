@@ -7,7 +7,7 @@
 
 #include "tartaruga.hpp"
 
-#include "jacare.hpp"
+#include "jacares.hpp"
 
 class Window : public abcg::OpenGLWindow {
 protected:
@@ -28,7 +28,7 @@ private:
 
   Tartaruga m_tartaruga;
 
-  Jacare m_jacare;
+  Jacares m_jacare;
 
   abcg::Timer m_restartWaitTimer;
 
