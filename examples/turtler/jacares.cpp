@@ -76,12 +76,12 @@ void Jacares::destroy() {
 }
 
 void Jacares::update(float deltaTime) {
-  // for (auto &jacare : m_jacares) {
-  //   jacare.m_translation.x += 1.3f * deltaTime;
+  for (auto &jacare : m_jacares) {
+    jacare.m_translation.x += 1.3f * deltaTime;
 
-  //   if (jacare.m_translation.x > +1.5f)
-  //     jacare.m_translation.x -= 3.0f;
-  // }
+    if (jacare.m_translation.x > +1.5f)
+      jacare.m_translation.x -= 3.0f;
+  }
 }
 
 Jacares::Jacare Jacares::makeJacare(glm::vec2 translation, float scale) {

@@ -148,9 +148,19 @@ void Window::checkCollisions() {
     float dx = m_tartaruga.m_translation.x - jacare.m_translation.x;
     float dy = m_tartaruga.m_translation.y - jacare.m_translation.y;
 
-    // Normalizar a distância ao longo do eixo da elipse
-    float normX = dx / jacare.m_scale * 0.9;
-    float normY = dy / jacare.m_scale * 1;
+    float normX;
+    float normY;
+    if (m_tartaruga.m_translation.x > jacare.m_translation.x) {
+      normX = dx / jacare.m_scale * 0.27;
+    } else {
+      normX = dx / jacare.m_scale * 0.7;
+    }
+
+    if (m_tartaruga.m_translation.y > jacare.m_translation.y) {
+      normY = dy / jacare.m_scale * 1;
+    } else {
+      normY = dy / jacare.m_scale * 1.3;
+    }
     float distance = sqrt(normX * normX + normY * normY);
 
     if (distance < 1.0f) {
