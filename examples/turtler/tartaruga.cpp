@@ -113,7 +113,8 @@ void Tartaruga::paint(const GameData &gameData) {
   if (m_trailBlinkTimer.elapsed() > 100.0 / 1000.0)
     m_trailBlinkTimer.restart();
 
-  m_color = glm::vec4(0.0f, 1.0f, 0.0f, 1.0f);
+  m_color = glm::vec4(138.0f / 255.0f, 154.0f / 255.0f, 91.0f / 255.0f, 1.0f);
+
   abcg::glUniform4fv(m_colorLoc, 1, &m_color.r);
   abcg::glDrawElements(GL_TRIANGLES, 8 * 3, GL_UNSIGNED_INT, nullptr);
 
