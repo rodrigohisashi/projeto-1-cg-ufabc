@@ -34,7 +34,7 @@ void Window::onCreate() {
 
   // Load a new font
   auto const filename{assetsPath + "emulogic.ttf"};
-  m_font = ImGui::GetIO().Fonts->AddFontFromFileTTF(filename.c_str(), 30.0f);
+  m_font = ImGui::GetIO().Fonts->AddFontFromFileTTF(filename.c_str(), 20.0f);
   if (m_font == nullptr) {
     throw abcg::RuntimeError("Cannot load font file");
   }
