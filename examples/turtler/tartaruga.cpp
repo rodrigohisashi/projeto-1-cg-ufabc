@@ -51,11 +51,6 @@ void Tartaruga::create(GLuint program) {
 
   };
 
-  // // Normalize
-  // for (auto &position : positions) {
-  //   position /= glm::vec2{15.5f, 15.5f};
-  // }
-
   std::array const indices{0, 1, 2, 1, 2, 3,
                            // head and tail
                            4, 5, 7, 4, 6, 7,
@@ -108,10 +103,6 @@ void Tartaruga::paint(const GameData &gameData) {
   abcg::glUniform1f(m_scaleLoc, m_scale);
   abcg::glUniform1f(m_rotationLoc, m_rotation);
   abcg::glUniform2fv(m_translationLoc, 1, &m_translation.x);
-
-  // Restart thruster blink timer every 100 ms
-  if (m_trailBlinkTimer.elapsed() > 100.0 / 1000.0)
-    m_trailBlinkTimer.restart();
 
   m_color = glm::vec4(138.0f / 255.0f, 154.0f / 255.0f, 91.0f / 255.0f, 1.0f);
 

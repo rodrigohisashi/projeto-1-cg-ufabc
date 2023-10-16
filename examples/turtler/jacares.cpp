@@ -14,17 +14,21 @@ void Jacares::create(GLuint program) {
   m_scaleLoc = abcg::glGetUniformLocation(m_program, "scale");
   m_translationLoc = abcg::glGetUniformLocation(m_program, "translation");
 
+  // Clear the list with the alligators VBO and resizes to accomodate six alligators
   m_jacares.clear();
   m_jacares.resize(6);
 
+  // Cont used to define the position and direction of each alligator
   int cont = 0;
 
   for (auto &jacare : m_jacares) {
+    // Create the alligator and defines the direction
     if (cont == 2 || cont == 3) {
       jacare = makeJacare({}, 0.18f, -1);
     } else {
       jacare = makeJacare({}, 0.18f, 1);
     }
+    // Change the position of each alligator
     switch (cont) {
     case 0:
       jacare.m_translation = glm::vec2(+0.5f, 0.45f);
@@ -80,8 +84,9 @@ void Jacares::destroy() {
 
 void Jacares::update(float deltaTime) {
   for (auto &jacare : m_jacares) {
+    // Make the movement in the respective's direction
     jacare.m_translation.x += 1.3f * deltaTime * jacare.m_direcao;
-
+    // Make the alligator appear in the other side of the window
     if (jacare.m_translation.x > +1.5f && jacare.m_direcao == 1)
       jacare.m_translation.x -= 3.0f;
     if (jacare.m_translation.x < -1.5f && jacare.m_direcao == -1)
@@ -93,7 +98,7 @@ Jacares::Jacare Jacares::makeJacare(glm::vec2 translation, float scale,
                                     int direcao) {
   Jacare jacare;
 
-  // Reset turtle attributes
+  // Reset alligator attributes
   jacare.m_rotation = direcao == 1 ? 0.0f : M_PI;
   jacare.m_translation = translation;
   jacare.m_scale = scale;
@@ -101,7 +106,7 @@ Jacares::Jacare Jacares::makeJacare(glm::vec2 translation, float scale,
   jacare.m_direcao = direcao;
 
   std::array positions{
-      // jacare head
+      // head
       glm::vec2{+2.5f, +0.8f},
       glm::vec2{+3.4f, +0.8f},
       glm::vec2{+3.5f, +0.7f},
@@ -112,7 +117,7 @@ Jacares::Jacare Jacares::makeJacare(glm::vec2 translation, float scale,
       glm::vec2{+2.0f, +0.9f},
       glm::vec2{+2.0f, +0.1f},
 
-      // corpo
+      // body
       glm::vec2{+2.0f, +0.0f}, // 6
       glm::vec2{+0.0f, 0.0f},
       glm::vec2{+0.0f, +1.0f},
@@ -130,21 +135,16 @@ Jacares::Jacare Jacares::makeJacare(glm::vec2 translation, float scale,
       glm::vec2{+1.8f, -0.2f},
       glm::vec2{+1.6f, +0.0f},
 
-      // Tail
+      // tail
       glm::vec2{-2.0f, +0.5f},
       glm::vec2{+0.0f, +0.8f},
       glm::vec2{+0.0f, +0.2f},
 
   };
 
-  // Normalize
-  // for (auto &position : positions) {
-  //   position /= glm::vec2{3.5f, 2.4f};
-  // }
-
-  std::array const indices{// Head
+  std::array const indices{// head
                            6, 7, 1, 1, 2, 7, 2, 3, 7, 3, 4, 7,
-                           // corpo
+                           // body
                            8, 9, 10, 8, 10, 11, 0, 8, 11, 0, 5, 8,
                            // fins
                            10, 12, 13, 14, 9, 15, 16, 17, 11, 18, 19, 8,

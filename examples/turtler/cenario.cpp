@@ -58,7 +58,7 @@ void Cenario::create(GLuint program) {
 void Cenario::paint() {
   abcg::glUseProgram(m_program);
 
-  // Desenhe a parte da água
+  // Paint the water portion
   abcg::glBindVertexArray(m_VAO);
   abcg::glUniform1f(m_scaleLoc, 1.0f);
   abcg::glUniform2f(m_translationLoc, 0.0f, 0.4f);
@@ -66,7 +66,7 @@ void Cenario::paint() {
   abcg::glUniform4fv(m_colorLoc, 1, &m_color.r);
   abcg::glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
 
-  // Desenhe a parte da areia
+  // Paint the sand portion
   abcg::glUniform2f(m_translationLoc, 0.0f, 0.0f);
   m_color = glm::vec4(220.0f / 255.0f, 203.0f / 255.0f, 181.0f / 255.0f, 1.0f);
   abcg::glUniform4fv(m_colorLoc, 1, &m_color.r);
