@@ -1,4 +1,5 @@
 #include "window.hpp"
+#include "imgui.h"
 
 void Window::onEvent(SDL_Event const &event) {
   // Keyboard events
@@ -66,6 +67,7 @@ void Window::restart() {
   m_tartaruga.create(m_objectsProgram);
 
   m_jacare.create(m_objectsProgram);
+  m_timer = 0.0f;
 }
 
 void Window::onUpdate() {
@@ -77,6 +79,8 @@ void Window::onUpdate() {
     restart();
     return;
   }
+
+  m_timer += deltaTime; // Atualize o temporizador
 
   m_tartaruga.update(m_gameData, deltaTime);
   m_jacare.update(deltaTime);
@@ -118,9 +122,32 @@ void Window::onPaintUI() {
     ImGui::PushFont(m_font);
 
     if (m_gameData.m_state == State::GameOver) {
-      ImGui::Text("Game Over!");
+      ImVec2 center = ImVec2(
+          (ImGui::GetIO().DisplaySize.x - ImGui::CalcTextSize("Game Over!").x) *
+              0.5f,
+          (ImGui::GetIO().DisplaySize.y - ImGui::CalcTextSize("Game Over!").y) *
+              0.5f);
+
+      ImGui::GetForegroundDrawList()->AddRectFilled(
+          ImVec2(0, 0), ImGui::GetIO().DisplaySize,
+          IM_COL32(0, 0, 0, 200));       // Cor escura de fundo
+      ImGui::SetCursorScreenPos(center); // Posiciona no centro da tela
+      ImGui::TextColored(ImVec4(1, 0, 0, 1),
+                         "Game Over!"); // Texto "Game Over!" em vermelho
+      ImGui::SetWindowFontScale(1.5f);  // Aumenta o tamanho do texto em 2 vezes
+
     } else if (m_gameData.m_state == State::Win) {
       ImGui::Text("You Win!");
+    } else if (m_gameData.m_state == State::Playing) {
+      ImGui::SetNextWindowPos(
+          ImVec2(10, 10)); // Define a posição do temporizador
+      ImGui::Begin("Temporizador", nullptr,
+                   ImGuiWindowFlags_NoBackground | ImGuiWindowFlags_NoTitleBar |
+                       ImGuiWindowFlags_NoInputs);
+      ImGui::SetWindowSize(
+          ImVec2(200, 100)); // Ajuste o tamanho da janela conforme necessário
+      ImGui::Text("Tempo: %.1f", m_timer); // Exibe o temporizador na tela
+      ImGui::End();
     }
 
     ImGui::PopFont();

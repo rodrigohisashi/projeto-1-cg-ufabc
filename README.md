@@ -278,7 +278,7 @@ void Tartaruga::update(const GameData &gameData, float deltaTime) {
 ```
 
 ### window.cpp
-No caso do window.cpp, alteramos Window::restart(), Window::onUpdate(), Window::onPaint() e Window::onDestroy() para chamar as respectivas funções de cenario, jacares e tartaruga.
+No caso do window.cpp, alteramos Window::restart(), Window::onUpdate(), Window::onPaint(), Window::OnPaintUI() e Window::onDestroy() para chamar as respectivas funções de cenario, jacares e tartaruga.
 ```cpp
 void Window::restart() {
   m_gameData.m_state = State::Playing;
@@ -324,6 +324,65 @@ void Window::onDestroy() {
   m_jacare.destroy();
 }
 ```
+No método `Window::onPaintUI()`, implementamos a lógica para renderizar a interface do usuário usando a biblioteca ImGui. Dependendo do estado atual do jogo, diferentes elementos de interface são exibidos para o usuário. O método gerencia as seguintes situações:
+
+- **Game Over:** Caso o estado do jogo seja definido como "GameOver", uma janela é exibida no centro da tela com um fundo escuro e a mensagem "Game Over!" em vermelho, em um tamanho de fonte aumentado para maior destaque.
+
+- **Vitória:** Se o estado do jogo for "Win", a mensagem "You Win!" é exibida.
+
+- **Jogando:** Quando o jogo está em andamento, uma janela de temporizador é exibida no canto da tela, mostrando o tempo decorrido desde o início do jogo.
+
+```cpp
+oid Window::onPaintUI() {
+  abcg::OpenGLWindow::onPaintUI();
+
+  {
+    auto const size{ImVec2(300, 85)};
+    auto const position{ImVec2((m_viewportSize.x - size.x) / 2.0f,
+                               (m_viewportSize.y - size.y) / 2.0f)};
+    ImGui::SetNextWindowPos(position);
+    ImGui::SetNextWindowSize(size);
+    ImGuiWindowFlags const flags{ImGuiWindowFlags_NoBackground |
+                                 ImGuiWindowFlags_NoTitleBar |
+                                 ImGuiWindowFlags_NoInputs};
+    ImGui::Begin(" ", nullptr, flags);
+    ImGui::PushFont(m_font);
+
+    if (m_gameData.m_state == State::GameOver) {
+      ImVec2 center = ImVec2(
+          (ImGui::GetIO().DisplaySize.x - ImGui::CalcTextSize("Game Over!").x) *
+              0.5f,
+          (ImGui::GetIO().DisplaySize.y - ImGui::CalcTextSize("Game Over!").y) *
+              0.5f);
+
+      ImGui::GetForegroundDrawList()->AddRectFilled(
+          ImVec2(0, 0), ImGui::GetIO().DisplaySize,
+          IM_COL32(0, 0, 0, 200));       // Cor escura de fundo
+      ImGui::SetCursorScreenPos(center); // Posiciona no centro da tela
+      ImGui::TextColored(ImVec4(1, 0, 0, 1),
+                         "Game Over!"); // Texto "Game Over!" em vermelho
+      ImGui::SetWindowFontScale(1.5f);  // Aumenta o tamanho do texto em 2 vezes
+
+    } else if (m_gameData.m_state == State::Win) {
+      ImGui::Text("You Win!");
+    } else if (m_gameData.m_state == State::Playing) {
+      ImGui::SetNextWindowPos(
+          ImVec2(10, 10)); // Define a posição do temporizador
+      ImGui::Begin("Temporizador", nullptr,
+                   ImGuiWindowFlags_NoBackground | ImGuiWindowFlags_NoTitleBar |
+                       ImGuiWindowFlags_NoInputs);
+      ImGui::SetWindowSize(
+          ImVec2(200, 100)); // Ajuste o tamanho da janela conforme necessário
+      ImGui::Text("Tempo: %.1f", m_timer); // Exibe o temporizador na tela
+      ImGui::End();
+    }
+
+    ImGui::PopFont();
+    ImGui::End();
+  }
+}
+```
+
 Alteramos também a função Window::checkWinCondition(), para que o jogo seja ganho quando a tartaruga chegar a um certo ponto do mapa.
 ```cpp
 void Window::checkWinCondition() {
