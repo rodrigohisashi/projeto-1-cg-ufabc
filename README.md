@@ -313,6 +313,7 @@ void Window::onPaint() {
   if (m_gameData.m_state == State::Playing) {
     checkWinCondition();
     checkCollisions();
+    checkTimer();
   }
 }
 
@@ -333,7 +334,7 @@ No método `Window::onPaintUI()`, implementamos a lógica para renderizar a inte
 - **Jogando:** Quando o jogo está em andamento, uma janela de temporizador é exibida no canto da tela, mostrando o tempo decorrido desde o início do jogo.
 
 ```cpp
-oid Window::onPaintUI() {
+void Window::onPaintUI() {
   abcg::OpenGLWindow::onPaintUI();
 
   {
@@ -349,43 +350,23 @@ oid Window::onPaintUI() {
     ImGui::PushFont(m_font);
 
     if (m_gameData.m_state == State::GameOver) {
-      ImVec2 center = ImVec2(
-          (ImGui::GetIO().DisplaySize.x - ImGui::CalcTextSize("Game Over!").x) *
-              0.5f,
-          (ImGui::GetIO().DisplaySize.y - ImGui::CalcTextSize("Game Over!").y) *
-              0.5f);
 
       ImGui::GetForegroundDrawList()->AddRectFilled(
           ImVec2(0, 0), ImGui::GetIO().DisplaySize,
-          IM_COL32(0, 0, 0, 200));       // Cor escura de fundo
-      ImGui::SetCursorScreenPos(center); // Posiciona no centro da tela
+          IM_COL32(0, 0, 0, 200)); // Cor escura de fundo
       ImGui::TextColored(ImVec4(1, 0, 0, 1),
-                         "Game Ovessr!"); // Texto "Game Over!" em vermelho
-      ImGui::SetWindowFontScale(1.5f);  // Aumenta o tamanho do texto em 2 vezes
+                         "Game Over!"); // Texto "Game Over!" em vermelho
+      ImGui::SetWindowFontScale(1.5f);
 
     } else if (m_gameData.m_state == State::Win) {
-     } else if (m_gameData.m_state == State::Win) {
-    // Configurando a fonte para ser maior e centralizada
-    ImGui::SetWindowFontScale(1.5f); // Aumenta o tamanho da fonte em 1.5 vezes
-    ImGui::SetCursorPosX((ImGui::GetWindowSize().x - ImGui::CalcTextSize("You Win!").x) / 2);
-    ImGui::Text("You Win!");
-
-    // Adicionando um emoji e uma mensagem especial para comemorar a vitória
-    ImGui::SetCursorPosX((ImGui::GetWindowSize().x - ImGui::CalcTextSize("🎉 Parabéns! Você venceu! 🎉").x) / 2);
-    ImGui::Text("🎉 Parabéns! Você venceu! 🎉");
-
-    // Redefinindo o tamanho da fonte para o padrão
-    ImGui::SetWindowFontScale(1.0f);
-}
-
+      ImGui::Text("You Win!");
     } else if (m_gameData.m_state == State::Playing) {
       ImGui::SetNextWindowPos(
           ImVec2(10, 10)); // Define a posição do temporizador
       ImGui::Begin("Temporizador", nullptr,
                    ImGuiWindowFlags_NoBackground | ImGuiWindowFlags_NoTitleBar |
                        ImGuiWindowFlags_NoInputs);
-      ImGui::SetWindowSize(
-          ImVec2(200, 100)); // Ajuste o tamanho da janela conforme necessário
+      ImGui::SetWindowSize(ImVec2(200, 100));
       ImGui::Text("Tempo: %.1f", m_timer); // Exibe o temporizador na tela
       ImGui::End();
     }
@@ -394,6 +375,17 @@ oid Window::onPaintUI() {
     ImGui::End();
   }
 }
+
+```
+Adicionamo a função Window::checkTimer(), para que checa se o timer zerou, ou seja, acabou o tempo do jogo.
+```cpp
+void Window::checkTimer() {
+  if (m_timer <= 0.0f) {
+    m_gameData.m_state = State::GameOver;
+    m_restartWaitTimer.restart();
+  }
+}
+
 ```
 
 Alteramos também a função Window::checkWinCondition(), para que o jogo seja ganho quando a tartaruga chegar a um certo ponto do mapa.

@@ -36,7 +36,7 @@ private:
 
   abcg::Timer m_restartWaitTimer;
 
-  float m_timer = 0.0f;
+  float m_timer = 60.0f;
   float m_elapsedTime = 0.0f;
   ImFont *m_font{};
 
@@ -45,6 +45,7 @@ private:
   void restart();
   void checkWinCondition();
   void checkCollisions();
+  void checkTimer();
 };
 
 #endif

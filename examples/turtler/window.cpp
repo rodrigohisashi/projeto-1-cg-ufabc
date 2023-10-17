@@ -57,6 +57,7 @@ void Window::onCreate() {
   m_randomEngine.seed(
       std::chrono::steady_clock::now().time_since_epoch().count());
 
+  m_timer = 20.0f;
   restart();
 }
 
@@ -67,7 +68,7 @@ void Window::restart() {
   m_tartaruga.create(m_objectsProgram);
 
   m_jacare.create(m_objectsProgram);
-  m_timer = 0.0f;
+  m_timer = 20.0f;
 }
 
 void Window::onUpdate() {
@@ -80,7 +81,7 @@ void Window::onUpdate() {
     return;
   }
 
-  m_timer += deltaTime; // Atualize o temporizador
+  m_timer -= deltaTime; // Atualize o temporizador
 
   m_tartaruga.update(m_gameData, deltaTime);
   m_jacare.update(deltaTime);
@@ -96,6 +97,14 @@ void Window::onPaint() {
   if (m_gameData.m_state == State::Playing) {
     checkWinCondition();
     checkCollisions();
+    checkTimer();
+  }
+}
+
+void Window::checkTimer() {
+  if (m_timer <= 0.0f) {
+    m_gameData.m_state = State::GameOver;
+    m_restartWaitTimer.restart();
   }
 }
 
@@ -122,19 +131,13 @@ void Window::onPaintUI() {
     ImGui::PushFont(m_font);
 
     if (m_gameData.m_state == State::GameOver) {
-      ImVec2 center = ImVec2(
-          (ImGui::GetIO().DisplaySize.x - ImGui::CalcTextSize("Game Over!").x) *
-              0.5f,
-          (ImGui::GetIO().DisplaySize.y - ImGui::CalcTextSize("Game Over!").y) *
-              0.5f);
 
       ImGui::GetForegroundDrawList()->AddRectFilled(
           ImVec2(0, 0), ImGui::GetIO().DisplaySize,
-          IM_COL32(0, 0, 0, 200));       // Cor escura de fundo
-      ImGui::SetCursorScreenPos(center); // Posiciona no centro da tela
+          IM_COL32(0, 0, 0, 200)); // Cor escura de fundo
       ImGui::TextColored(ImVec4(1, 0, 0, 1),
                          "Game Over!"); // Texto "Game Over!" em vermelho
-      ImGui::SetWindowFontScale(1.5f);  // Aumenta o tamanho do texto em 2 vezes
+      ImGui::SetWindowFontScale(1.5f);
 
     } else if (m_gameData.m_state == State::Win) {
       ImGui::Text("You Win!");
@@ -144,8 +147,7 @@ void Window::onPaintUI() {
       ImGui::Begin("Temporizador", nullptr,
                    ImGuiWindowFlags_NoBackground | ImGuiWindowFlags_NoTitleBar |
                        ImGuiWindowFlags_NoInputs);
-      ImGui::SetWindowSize(
-          ImVec2(200, 100)); // Ajuste o tamanho da janela conforme necessário
+      ImGui::SetWindowSize(ImVec2(200, 100));
       ImGui::Text("Tempo: %.1f", m_timer); // Exibe o temporizador na tela
       ImGui::End();
     }
