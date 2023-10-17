@@ -360,11 +360,24 @@ oid Window::onPaintUI() {
           IM_COL32(0, 0, 0, 200));       // Cor escura de fundo
       ImGui::SetCursorScreenPos(center); // Posiciona no centro da tela
       ImGui::TextColored(ImVec4(1, 0, 0, 1),
-                         "Game Over!"); // Texto "Game Over!" em vermelho
+                         "Game Ovessr!"); // Texto "Game Over!" em vermelho
       ImGui::SetWindowFontScale(1.5f);  // Aumenta o tamanho do texto em 2 vezes
 
     } else if (m_gameData.m_state == State::Win) {
-      ImGui::Text("You Win!");
+     } else if (m_gameData.m_state == State::Win) {
+    // Configurando a fonte para ser maior e centralizada
+    ImGui::SetWindowFontScale(1.5f); // Aumenta o tamanho da fonte em 1.5 vezes
+    ImGui::SetCursorPosX((ImGui::GetWindowSize().x - ImGui::CalcTextSize("You Win!").x) / 2);
+    ImGui::Text("You Win!");
+
+    // Adicionando um emoji e uma mensagem especial para comemorar a vitória
+    ImGui::SetCursorPosX((ImGui::GetWindowSize().x - ImGui::CalcTextSize("🎉 Parabéns! Você venceu! 🎉").x) / 2);
+    ImGui::Text("🎉 Parabéns! Você venceu! 🎉");
+
+    // Redefinindo o tamanho da fonte para o padrão
+    ImGui::SetWindowFontScale(1.0f);
+}
+
     } else if (m_gameData.m_state == State::Playing) {
       ImGui::SetNextWindowPos(
           ImVec2(10, 10)); // Define a posição do temporizador
