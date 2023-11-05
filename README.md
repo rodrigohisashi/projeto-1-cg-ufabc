@@ -11,7 +11,7 @@ O jogo foi desenvolvido em C++, utilizando o framework ABCg, se baseando no cód
 
 No jogo temos como personagem principal uma tartaruga, que deve passar por três fileiras de jacarés e chegar a mar, ganhando o jogo quando chega ao mar, porém, se a tartaruga encostar em algum dos jacarés no caminho o usuário perde o jogo e deve começar do inicío. 
 
-O jogo está disponível em [Turtler](https://rodrigohisashi.github.io/projeto-1-cg-ufabc/turtler/).
+O jogo está disponível em [Turtler](https://rodrigohisashi.github.io/turtler-projeto-computacao-grafica/turtler/).
 
 ## Como Jogar
 - Use as setas do teclado para mover a tartaruga para cima, para baixo, para a esquerda e para a direita.
